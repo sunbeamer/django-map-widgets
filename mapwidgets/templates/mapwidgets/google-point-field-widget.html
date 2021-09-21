@@ -53,6 +53,7 @@
         (function($) {
             var mapOptions = JSON.parse("{{ options|escapejs }}");
             var field_value = JSON.parse("{{ field_value|escapejs }}");
+            var markers_list = JSON.parse("{{ markers_list|escapejs }}");
 
             var wrapElemSelector = "#{{ name }}-mw-wrap";
             var mapElemID = "{{ name }}-map-elem";
@@ -60,6 +61,7 @@
             var locationInputID = "#{{ id }}";
 
             var mapWidgetOptions = {
+                markers_list: markers_list,
                 locationInput: $(locationInputID),
                 wrapElemSelector: wrapElemSelector,
                 locationFieldValue: field_value,

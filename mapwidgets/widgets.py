@@ -7,6 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.utils.http import urlencode
+from django.utils.module_loading import import_string
 
 from mapwidgets.constants import STATIC_MAP_PLACEHOLDER_IMAGE
 from mapwidgets.settings import MapWidgetSettings, mw_settings
@@ -92,6 +93,7 @@ class GooglePointFieldWidget(BasePointFieldMapWidget):
             attrs = dict()
 
         field_value = {}
+        latitude, longitude = (None, None)
         if value and isinstance(value, str):
             value = self.deserialize(value)
             longitude, latitude = value.coords
@@ -108,9 +110,20 @@ class GooglePointFieldWidget(BasePointFieldMapWidget):
             field_value['lng'] = longitude
             field_value['lat'] = latitude
 
+        # if self.custom_settings:
+        #     print('Using custom settings CUSTOM_MAP_SETTINGS in admin.py')
+        # else:
+        #     print('Using settings.MAP_WIDGETS')
+
+        dotted_import_path = self.settings['markers']
+        stations = import_string(dotted_import_path)(latitude, longitude)
+        markers_list = [{"position": {"lat": s.coord.y, "lng": s.coord.x},
+                         "title": s.name} for s in stations]
+
         extra_attrs = {
             'options': self.map_options(),
-            'field_value': json.dumps(field_value)
+            'field_value': json.dumps(field_value),
+            'markers_list': json.dumps(markers_list)
         }
         attrs.update(extra_attrs)
         self.as_super = super(GooglePointFieldWidget, self)

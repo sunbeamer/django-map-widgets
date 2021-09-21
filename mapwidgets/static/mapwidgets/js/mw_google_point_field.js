@@ -52,6 +52,16 @@
                 }
             }
 
+//            console.log("Dropping markers...")
+            for (let i = 0; i < this.markers_list.length; i++) {
+                const marker = new google.maps.Marker({
+                  position: this.markers_list[i].position,
+                  title: this.markers_list[i].title,
+                  zIndex: -10000,
+                  icon: {url: "http://maps.google.com/mapfiles/kml/paddle/purple-circle.png", scaledSize: new google.maps.Size(32, 32)},
+                  map: this.map,
+                });
+            }
         },
 
         addMarkerToMap: function(lat, lng){
