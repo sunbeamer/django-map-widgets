@@ -116,9 +116,7 @@ class GooglePointFieldWidget(BasePointFieldMapWidget):
         #     print('Using settings.MAP_WIDGETS')
 
         dotted_import_path = self.settings['markers']
-        stations = import_string(dotted_import_path)(latitude, longitude)
-        markers_list = [{"position": {"lat": s.coord.y, "lng": s.coord.x},
-                         "title": s.name} for s in stations]
+        markers_list = import_string(dotted_import_path)(value)
 
         extra_attrs = {
             'options': self.map_options(),
