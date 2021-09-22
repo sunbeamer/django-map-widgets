@@ -93,7 +93,6 @@ class GooglePointFieldWidget(BasePointFieldMapWidget):
             attrs = dict()
 
         field_value = {}
-        latitude, longitude = (None, None)
         if value and isinstance(value, str):
             value = self.deserialize(value)
             longitude, latitude = value.coords
